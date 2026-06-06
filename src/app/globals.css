@@ -1,26 +1,533 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ────────────────────────────────────────────────────────────
+   CELESTRA RESEARCH AI — MULTI-THEME DESIGN SYSTEM
+   8 premium themes. All visuals driven by CSS variables.
+   No hardcoded colors in components.
+   ──────────────────────────────────────────────────────────── */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   BASE TOKENS  (defaults = DARK COMMAND)
+   Derived aliases live here and resolve against whatever the
+   active theme class sets, so existing tone utilities adapt.
+   ============================================================ */
+:root {
+  /* Brand palette */
+  --primary: #00e5ff;
+  --secondary: #00ffa3;
+  --accent: #ffb800;
+  --success: #00ffa3;
+  --warning: #ffb800;
+  --danger: #ff4d4d;
+
+  /* Surfaces */
+  --background: #050505;
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0f;
+  --surface: #0b0b0f;
+  --card: #111118;
+  --card-elevated: #16161f;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --text-primary: #f4f4f6;
+  --text-secondary: #8a8a99;
+  --muted-foreground: #6b6b78;
+
+  /* Effects */
+  --grid-line: rgba(255, 255, 255, 0.025);
+  --glow-1: rgba(0, 229, 255, 0.12);
+  --glow-2: rgba(0, 255, 163, 0.1);
+  --glow-3: rgba(255, 184, 0, 0.06);
+
+  color-scheme: dark;
+
+  /* ---- Derived aliases (DO NOT override per-theme) ---- */
+  --panel: var(--surface);
+  --foreground: var(--text-primary);
+  --muted: var(--text-secondary);
+  --ring: color-mix(in srgb, var(--primary) 55%, transparent);
+  --glow: color-mix(in srgb, var(--primary) 70%, transparent);
+  --glow-soft: color-mix(in srgb, var(--primary) 28%, transparent);
+
+  /* Tone aliases consumed by existing components */
+  --indigo: var(--primary);
+  --purple: var(--accent);
+  --blue: var(--secondary);
+  --emerald: var(--success);
+  --amber: var(--warning);
+  --rose: var(--danger);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   THEME 1 — DARK COMMAND (explicit, for completeness)
+   ============================================================ */
+.dark-command {
+  --primary: #00e5ff;
+  --secondary: #00ffa3;
+  --accent: #ffb800;
+  --success: #00ffa3;
+  --warning: #ffb800;
+  --danger: #ff4d4d;
+  --background: #050505;
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0f;
+  --surface: #0b0b0f;
+  --card: #111118;
+  --card-elevated: #16161f;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --text-primary: #f4f4f6;
+  --text-secondary: #8a8a99;
+  --muted-foreground: #6b6b78;
+  --grid-line: rgba(255, 255, 255, 0.025);
+  --glow-1: rgba(0, 229, 255, 0.12);
+  --glow-2: rgba(0, 255, 163, 0.1);
+  --glow-3: rgba(255, 184, 0, 0.06);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   THEME 2 — LIGHT EXECUTIVE
+   ============================================================ */
+.light-executive {
+  --primary: #3b82f6;
+  --secondary: #22c55e;
+  --accent: #8b5cf6;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --background: #f7f8fc;
+  --bg-primary: #f7f8fc;
+  --bg-secondary: #eef1f8;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --card-elevated: #ffffff;
+  --border: rgba(12, 18, 38, 0.1);
+  --border-strong: rgba(12, 18, 38, 0.18);
+  --text-primary: #0b1220;
+  --text-secondary: #51607a;
+  --muted-foreground: #8a97ad;
+  --grid-line: rgba(20, 30, 70, 0.05);
+  --glow-1: rgba(59, 130, 246, 0.12);
+  --glow-2: rgba(139, 92, 246, 0.1);
+  --glow-3: rgba(34, 197, 94, 0.07);
+  color-scheme: light;
+}
+
+/* ============================================================
+   THEME 3 — OCEAN INTELLIGENCE
+   ============================================================ */
+.ocean {
+  --primary: #00c2ff;
+  --secondary: #00ffd1;
+  --accent: #4deeea;
+  --success: #00ffd1;
+  --warning: #ffc857;
+  --danger: #ff5c7a;
+  --background: #031926;
+  --bg-primary: #031926;
+  --bg-secondary: #052235;
+  --surface: #06283d;
+  --card: #0b3954;
+  --card-elevated: #0e4663;
+  --border: rgba(120, 220, 255, 0.12);
+  --border-strong: rgba(120, 220, 255, 0.24);
+  --text-primary: #e6f7ff;
+  --text-secondary: #8fb6cc;
+  --muted-foreground: #5e869b;
+  --grid-line: rgba(120, 220, 255, 0.05);
+  --glow-1: rgba(0, 194, 255, 0.16);
+  --glow-2: rgba(0, 255, 209, 0.1);
+  --glow-3: rgba(77, 238, 234, 0.08);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   THEME 4 — SUNSET ANALYTICS
+   ============================================================ */
+.sunset {
+  --primary: #ff6b35;
+  --secondary: #ffb703;
+  --accent: #ff4d6d;
+  --success: #4ade80;
+  --warning: #ffb703;
+  --danger: #ff4d6d;
+  --background: #0d1117;
+  --bg-primary: #0d1117;
+  --bg-secondary: #12181f;
+  --surface: #161b22;
+  --card: #1f2937;
+  --card-elevated: #273341;
+  --border: rgba(255, 180, 120, 0.12);
+  --border-strong: rgba(255, 180, 120, 0.24);
+  --text-primary: #f5ede6;
+  --text-secondary: #b0a395;
+  --muted-foreground: #80776b;
+  --grid-line: rgba(255, 180, 120, 0.05);
+  --glow-1: rgba(255, 107, 53, 0.16);
+  --glow-2: rgba(255, 183, 3, 0.1);
+  --glow-3: rgba(255, 77, 109, 0.08);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   THEME 5 — FOREST STRATEGY
+   ============================================================ */
+.forest {
+  --primary: #00ff85;
+  --secondary: #8eff00;
+  --accent: #00d46a;
+  --success: #00ff85;
+  --warning: #d4ff00;
+  --danger: #ff5c5c;
+  --background: #071a07;
+  --bg-primary: #071a07;
+  --bg-secondary: #0b230b;
+  --surface: #0e2a0e;
+  --card: #123524;
+  --card-elevated: #16401c;
+  --border: rgba(140, 255, 120, 0.12);
+  --border-strong: rgba(140, 255, 120, 0.24);
+  --text-primary: #e8ffe8;
+  --text-secondary: #9cc79c;
+  --muted-foreground: #6e926e;
+  --grid-line: rgba(140, 255, 120, 0.05);
+  --glow-1: rgba(0, 255, 133, 0.16);
+  --glow-2: rgba(142, 255, 0, 0.1);
+  --glow-3: rgba(0, 212, 106, 0.08);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   THEME 6 — MIDNIGHT BLUE
+   ============================================================ */
+.midnight {
+  --primary: #2563eb;
+  --secondary: #60a5fa;
+  --accent: #38bdf8;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f43f5e;
+  --background: #020617;
+  --bg-primary: #020617;
+  --bg-secondary: #0a0f22;
+  --surface: #0f172a;
+  --card: #172554;
+  --card-elevated: #1e2e63;
+  --border: rgba(120, 160, 255, 0.12);
+  --border-strong: rgba(120, 160, 255, 0.24);
+  --text-primary: #e8eeff;
+  --text-secondary: #94a3c8;
+  --muted-foreground: #64748b;
+  --grid-line: rgba(120, 160, 255, 0.05);
+  --glow-1: rgba(37, 99, 235, 0.16);
+  --glow-2: rgba(56, 189, 248, 0.1);
+  --glow-3: rgba(96, 165, 250, 0.08);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   THEME 7 — AURORA
+   ============================================================ */
+.aurora {
+  --primary: #00f5d4;
+  --secondary: #7b2cbf;
+  --accent: #4cc9f0;
+  --success: #00f5d4;
+  --warning: #ffd166;
+  --danger: #ff5d8f;
+  --background: #030712;
+  --bg-primary: #030712;
+  --bg-secondary: #0a1120;
+  --surface: #111827;
+  --card: #1f2937;
+  --card-elevated: #273341;
+  --border: rgba(120, 200, 255, 0.12);
+  --border-strong: rgba(120, 200, 255, 0.24);
+  --text-primary: #ecf1ff;
+  --text-secondary: #98a6c0;
+  --muted-foreground: #6b7894;
+  --grid-line: rgba(120, 200, 255, 0.05);
+  --glow-1: rgba(0, 245, 212, 0.16);
+  --glow-2: rgba(123, 44, 191, 0.12);
+  --glow-3: rgba(76, 201, 240, 0.08);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   THEME 8 — VOLCANIC
+   ============================================================ */
+.volcanic {
+  --primary: #ff3d00;
+  --secondary: #ff9100;
+  --accent: #ff1744;
+  --success: #00e676;
+  --warning: #ff9100;
+  --danger: #ff1744;
+  --background: #080808;
+  --bg-primary: #080808;
+  --bg-secondary: #101010;
+  --surface: #141414;
+  --card: #1e1e1e;
+  --card-elevated: #262626;
+  --border: rgba(255, 90, 40, 0.14);
+  --border-strong: rgba(255, 90, 40, 0.28);
+  --text-primary: #fff1ec;
+  --text-secondary: #b59a92;
+  --muted-foreground: #847069;
+  --grid-line: rgba(255, 90, 40, 0.05);
+  --glow-1: rgba(255, 61, 0, 0.16);
+  --glow-2: rgba(255, 145, 0, 0.1);
+  --glow-3: rgba(255, 23, 68, 0.08);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   TAILWIND THEME MAPPING
+   ============================================================ */
+@theme inline {
+  --color-background: var(--background);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-panel: var(--panel);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-card-elevated: var(--card-elevated);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --color-indigo: var(--indigo);
+  --color-purple: var(--purple);
+  --color-blue: var(--blue);
+  --color-emerald: var(--emerald);
+  --color-amber: var(--amber);
+  --color-rose: var(--rose);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+}
+
+* {
+  border-color: var(--border);
+}
+
+/* ── Smooth 300ms theme transition on every element ── */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    fill 0.3s ease,
+    stroke 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient background glow (theme-aware) */
+.app-aurora {
+  background:
+    radial-gradient(60rem 40rem at 12% -10%, var(--glow-1), transparent 60%),
+    radial-gradient(50rem 36rem at 100% 0%, var(--glow-2), transparent 55%),
+    radial-gradient(50rem 50rem at 50% 120%, var(--glow-3), transparent 60%);
+}
+
+/* Subtle grid texture (theme-aware) */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Glassy panel */
+.glass {
+  background: color-mix(in srgb, var(--card) 72%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Glow text */
+.glow-indigo {
+  text-shadow: 0 0 24px var(--glow);
+}
+
+/* Sidebar colored glow (theme-aware) */
+.sidebar-glow {
+  box-shadow: 1px 0 30px -14px var(--glow);
+}
+
+/* Premium card sheen on hover */
+.card-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.card-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    36rem 16rem at var(--mx, 50%) var(--my, 0%),
+    var(--glow-soft),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.card-sheen:hover::after {
+  opacity: 1;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--glow);
+  background-clip: padding-box;
+}
+
+/* Number ticker / mono digits */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Pulse dot for live indicators (theme-aware) */
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--glow-soft);
+  }
+  70% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.live-dot {
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(400%);
+  }
+}
+.scanline {
+  animation: scan 3.5s linear infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--foreground) 6%, transparent),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+/* ── Command Center Mode — animated intelligence grid ── */
+@keyframes grid-drift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 44px 44px, 44px 44px;
+  }
+}
+.cc-grid {
+  background-image:
+    linear-gradient(to right, var(--glow-soft) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glow-soft) 1px, transparent 1px);
+  background-size: 44px 44px;
+  animation: grid-drift 6s linear infinite;
+}
+
+@keyframes cc-float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-120px) translateX(20px);
+    opacity: 0;
+  }
+}
+.cc-particle {
+  position: absolute;
+  border-radius: 9999px;
+  background: var(--primary);
+  animation: cc-float linear infinite;
 }
