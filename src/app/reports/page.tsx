@@ -4,7 +4,9 @@ import { FileBarChart, Download, Clock, Loader2, FileText } from "lucide-react";
 import { PageHeader, Reveal, SectionTitle } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { reports, type Report } from "@/lib/data";
+import { reports as mockReports, type Report } from "@/lib/data";
+import { fetchReports } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { toneIconWrap } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
@@ -44,6 +46,8 @@ function ReportRow({ r, i }: { r: Report; i: number }) {
 }
 
 export default function Reports() {
+  const reports = useBackendData(fetchReports, mockReports);
+
   return (
     <div className="space-y-8">
       <PageHeader

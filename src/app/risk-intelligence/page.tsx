@@ -5,7 +5,9 @@ import { ShieldAlert, TrendingUp, Minus, TrendingDown, AlertTriangle } from "luc
 import { PageHeader, Reveal, SectionTitle } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { risks, type Risk, type Priority } from "@/lib/data";
+import { risks as mockRisks, type Risk, type Priority } from "@/lib/data";
+import { fetchRisks } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { useToneColors } from "@/lib/use-theme-colors";
 
 const levelTone: Record<Priority, "rose" | "amber" | "blue" | "default"> = {
@@ -26,7 +28,7 @@ const trendColor = {
   Falling: "text-emerald",
 };
 
-function RiskMatrix() {
+function RiskMatrix({ risks }: { risks: Risk[] }) {
   const toneHex = useToneColors();
   return (
     <Card sheen={false} className="p-5">
@@ -73,7 +75,7 @@ function RiskMatrix() {
   );
 }
 
-function RiskHeatmap() {
+function RiskHeatmap({ risks }: { risks: Risk[] }) {
   const toneHex = useToneColors();
   const categories = Array.from(new Set(risks.map((r) => r.category)));
   return (
@@ -141,6 +143,7 @@ function RiskRow({ r, i }: { r: Risk; i: number }) {
 }
 
 export default function RiskIntelligence() {
+  const risks = useBackendData(fetchRisks, mockRisks);
   const highRisks = risks.filter((r) => r.level === "High" || r.level === "Critical").length;
   const avgExposure = Math.round(
     risks.reduce((s, r) => s + (r.likelihood * r.severity) / 100, 0) / risks.length,
@@ -172,8 +175,8 @@ export default function RiskIntelligence() {
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <Reveal><RiskMatrix /></Reveal>
-        <Reveal i={1}><RiskHeatmap /></Reveal>
+        <Reveal><RiskMatrix risks={risks} /></Reveal>
+        <Reveal i={1}><RiskHeatmap risks={risks} /></Reveal>
       </div>
 
       <Reveal>

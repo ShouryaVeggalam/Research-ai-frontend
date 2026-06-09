@@ -1,13 +1,16 @@
 "use client";
 
-import { Sparkles, TrendingUp, Target, DollarSign, Swords, ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { Sparkles, TrendingUp, Target, DollarSign, Swords, ArrowUpRight, Loader2 } from "lucide-react";
 import { PageHeader, Reveal } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScoreRing } from "@/components/ui/score-ring";
-import { opportunities, type Opportunity, type Priority } from "@/lib/data";
+import { opportunities as mockOpportunities, type Opportunity, type Priority } from "@/lib/data";
+import { fetchOpportunities, runOpportunityGenerate } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { formatCurrency } from "@/lib/utils";
 
 const priorityTone: Record<Priority, "rose" | "amber" | "blue" | "default"> = {
@@ -92,10 +95,25 @@ function OpportunityCard({ o, i }: { o: Opportunity; i: number }) {
 }
 
 export default function OpportunityCenter() {
+  const [generating, setGenerating] = useState(false);
+  const [liveOpps, setLiveOpps] = useState<Opportunity[] | null>(null);
+  const fetched = useBackendData(fetchOpportunities, mockOpportunities);
+  const opportunities = liveOpps ?? fetched;
+
+  async function discoverNew() {
+    setGenerating(true);
+    try {
+      const fresh = await runOpportunityGenerate();
+      if (fresh?.length) setLiveOpps(fresh);
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   const totalRevenue = opportunities.reduce((s, o) => s + o.revenuePotential, 0);
-  const avgScore = Math.round(
-    opportunities.reduce((s, o) => s + o.opportunityScore, 0) / opportunities.length,
-  );
+  const avgScore = opportunities.length
+    ? Math.round(opportunities.reduce((s, o) => s + o.opportunityScore, 0) / opportunities.length)
+    : 0;
 
   return (
     <div className="space-y-8">
@@ -105,8 +123,9 @@ export default function OpportunityCenter() {
         description="AI-ranked strategic openings — scored by market size, competition, growth, and revenue potential."
         icon={Sparkles}
         actions={
-          <Button size="sm">
-            <Sparkles className="h-4 w-4" /> Discover New
+          <Button size="sm" onClick={discoverNew} disabled={generating}>
+            {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            Discover New
           </Button>
         }
       />

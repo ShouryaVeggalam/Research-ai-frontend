@@ -6,7 +6,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Sparkline } from "@/components/viz/sparkline";
-import { markets, type Market } from "@/lib/data";
+import { markets as mockMarkets, type Market } from "@/lib/data";
+import { fetchMarkets } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { formatCurrency } from "@/lib/utils";
 import { toneText } from "@/lib/tones";
 
@@ -49,6 +51,7 @@ function MarketCard({ m, i }: { m: Market; i: number }) {
 }
 
 export default function MarketIntelligence() {
+  const markets = useBackendData(fetchMarkets, mockMarkets);
   const totalTam = markets.reduce((s, m) => s + m.size, 0);
   return (
     <div className="space-y-8">

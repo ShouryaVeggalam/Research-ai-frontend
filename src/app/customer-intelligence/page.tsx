@@ -15,7 +15,9 @@ import { PageHeader, Reveal, SectionTitle } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { segments, customerNeeds, type Segment } from "@/lib/data";
+import { segments as mockSegments, customerNeeds as mockCustomerNeeds, type Segment } from "@/lib/data";
+import { fetchCustomerSegments } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { formatNumber } from "@/lib/utils";
 import { toneText } from "@/lib/tones";
 import { useChartTheme } from "@/lib/use-theme-colors";
@@ -58,6 +60,13 @@ function SegmentCard({ s, i }: { s: Segment; i: number }) {
 }
 
 export default function CustomerIntelligence() {
+  const customerData = useBackendData(
+    fetchCustomerSegments,
+    { segments: mockSegments, needs: mockCustomerNeeds },
+    (d) => d.segments.length === 0,
+  );
+  const segments = customerData.segments;
+  const customerNeeds = customerData.needs;
   const ct = useChartTheme();
   return (
     <div className="space-y-8">

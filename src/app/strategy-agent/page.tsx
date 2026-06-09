@@ -6,6 +6,11 @@ import { Bot, ArrowUp, Sparkles, User, Loader2, Brain } from "lucide-react";
 import { PageHeader } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { strategyPrompts, strategyAnswers } from "@/lib/data";
+import {
+  fetchStrategyRecommendations,
+  runStrategyGenerate,
+  strategyAnswerFromBackend,
+} from "@/lib/api";
 
 interface Msg {
   role: "user" | "agent";
@@ -32,28 +37,37 @@ export default function StrategyAgent() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [recs, setRecs] = useState<Awaited<ReturnType<typeof fetchStrategyRecommendations>>>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  function send(text: string) {
+  useEffect(() => {
+    fetchStrategyRecommendations().then(setRecs);
+  }, []);
+
+  async function send(text: string) {
     if (!text.trim() || busy) return;
     setBusy(true);
     setMessages((m) => [...m, { role: "user", text }]);
     setInput("");
     setMessages((m) => [...m, { role: "agent", text: "", thinking: true }]);
 
-    const answer = answers[text] ?? strategyAnswers.default;
-    setTimeout(() => {
-      setMessages((m) => {
-        const copy = [...m];
-        copy[copy.length - 1] = { role: "agent", text: answer };
-        return copy;
-      });
-      setBusy(false);
-    }, 1400);
+    let backendAnswer = strategyAnswerFromBackend(text, recs, null);
+    if (!backendAnswer) {
+      const agent = await runStrategyGenerate();
+      backendAnswer = strategyAnswerFromBackend(text, recs, agent);
+    }
+    const answer = backendAnswer ?? answers[text] ?? strategyAnswers.default;
+
+    setMessages((m) => {
+      const copy = [...m];
+      copy[copy.length - 1] = { role: "agent", text: answer };
+      return copy;
+    });
+    setBusy(false);
   }
 
   return (

@@ -7,7 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Sparkline } from "@/components/viz/sparkline";
 import { AreaTrend } from "@/components/viz/area-trend";
-import { trends, type Trend } from "@/lib/data";
+import { trends as mockTrends, type Trend } from "@/lib/data";
+import { fetchTrends } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { toneText } from "@/lib/tones";
 
 const stageTone: Record<Trend["stage"], "emerald" | "indigo" | "amber" | "blue"> = {
@@ -74,12 +76,13 @@ function TrendCard({ t, i }: { t: Trend; i: number }) {
 }
 
 export default function TrendIntelligence() {
+  const trends = useBackendData(fetchTrends, mockTrends);
   const months = ["Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26", "Q3'26", "Q4'26", "Q1'27"];
   const forecastData = months.map((m, idx) => ({
     month: m,
-    agents: trends[0].forecast[idx],
-    eval: trends[2].forecast[idx],
-    compliance: trends[4].forecast[idx],
+    agents: trends[0]?.forecast[idx] ?? 0,
+    eval: trends[2]?.forecast[idx] ?? 0,
+    compliance: trends[4]?.forecast[idx] ?? 0,
   }));
 
   return (

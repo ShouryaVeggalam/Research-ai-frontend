@@ -7,7 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { AreaTrend } from "@/components/viz/area-trend";
-import { executive, opportunities, risks, type Tone } from "@/lib/data";
+import {
+  executive as mockExecutive,
+  opportunities as mockOpportunities,
+  risks as mockRisks,
+  type Tone,
+} from "@/lib/data";
+import { fetchCROSummary, fetchOpportunities, fetchRisks } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { toneText } from "@/lib/tones";
 
 function ExecGauge({ label, value, tone, invert }: { label: string; value: number; tone: Tone; invert?: boolean }) {
@@ -25,6 +32,10 @@ function ExecGauge({ label, value, tone, invert }: { label: string; value: numbe
 }
 
 export default function ChiefResearchOfficer() {
+  const executive = useBackendData(fetchCROSummary, mockExecutive, () => false);
+  const opportunities = useBackendData(fetchOpportunities, mockOpportunities);
+  const risks = useBackendData(fetchRisks, mockRisks);
+
   return (
     <div className="space-y-8">
       <PageHeader

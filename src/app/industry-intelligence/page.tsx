@@ -5,7 +5,9 @@ import { PageHeader, Reveal, SectionTitle } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ScoreRing } from "@/components/ui/score-ring";
-import { industries, type Industry } from "@/lib/data";
+import { industries as mockIndustries, type Industry } from "@/lib/data";
+import { fetchIndustries } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 
 function IndustryCard({ ind, i }: { ind: Industry; i: number }) {
   return (
@@ -42,6 +44,7 @@ function IndustryCard({ ind, i }: { ind: Industry; i: number }) {
 }
 
 export default function IndustryIntelligence() {
+  const industries = useBackendData(fetchIndustries, mockIndustries);
   return (
     <div className="space-y-8">
       <PageHeader

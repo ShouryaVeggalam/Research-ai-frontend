@@ -6,7 +6,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Sparkline } from "@/components/viz/sparkline";
-import { competitors, type Competitor, type Priority } from "@/lib/data";
+import { competitors as mockCompetitors, type Competitor, type Priority } from "@/lib/data";
+import { fetchCompetitors } from "@/lib/api";
+import { useBackendData } from "@/lib/use-backend-data";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 
 const threatTone: Record<Priority, "rose" | "amber" | "blue" | "default"> = {
@@ -107,6 +109,7 @@ function CompetitorCard({ c, i }: { c: Competitor; i: number }) {
 }
 
 export default function CompetitorIntelligence() {
+  const competitors = useBackendData(fetchCompetitors, mockCompetitors);
   const critical = competitors.filter((c) => c.threat === "Critical").length;
   const totalFunding = competitors.reduce((s, c) => s + c.funding, 0);
 
