@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { feedItems, feedToneMap, type FeedItem, type FeedType } from "@/lib/data";
+import { fetchFeed } from "@/lib/api";
 import { toneIconWrap, toneText } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
@@ -100,8 +101,42 @@ function FeedRow({ item, isNew }: { item: FeedItem; isNew?: boolean }) {
 export function LiveFeed() {
   const [items, setItems] = useState<FeedItem[]>(feedItems);
   const [newId, setNewId] = useState<string | null>(null);
+  const [live, setLive] = useState(false);
 
+  // Try the backend first. If it returns feed items, switch to live mode and
+  // poll for updates. Otherwise keep the simulated demo feed below.
   useEffect(() => {
+    let active = true;
+    fetchFeed(14)
+      .then((real) => {
+        if (active && real && real.length > 0) {
+          setItems(real);
+          setNewId(real[0]?.id ?? null);
+          setLive(true);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Live mode: poll the backend feed and surface new items at the top.
+  useEffect(() => {
+    if (!live) return;
+    const interval = setInterval(async () => {
+      const real = await fetchFeed(14);
+      if (real && real.length > 0) {
+        setNewId(real[0]?.id ?? null);
+        setItems(real);
+      }
+    }, 15_000);
+    return () => clearInterval(interval);
+  }, [live]);
+
+  // Demo mode: synthesize a flowing feed from the mock pool.
+  useEffect(() => {
+    if (live) return;
     const pool = feedItems;
     let counter = 1000;
     const interval = setInterval(() => {
@@ -116,7 +151,7 @@ export function LiveFeed() {
       setItems((prev) => [fresh, ...prev].slice(0, 14));
     }, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [live]);
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card">

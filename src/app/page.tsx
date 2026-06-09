@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -19,10 +20,25 @@ import { MetricCard } from "@/components/viz/metric-card";
 import { LiveFeed } from "@/components/features/live-feed";
 import { StrategyMap } from "@/components/features/strategy-map";
 import { Sparkline } from "@/components/viz/sparkline";
-import { heroMetrics, opportunities, trends } from "@/lib/data";
+import { heroMetrics, opportunities, trends, type KPI } from "@/lib/data";
+import { fetchHeroMetrics } from "@/lib/api";
 import { toneText } from "@/lib/tones";
 
 export default function MissionControl() {
+  const [metrics, setMetrics] = useState<KPI[]>(heroMetrics);
+
+  useEffect(() => {
+    let active = true;
+    fetchHeroMetrics()
+      .then((live) => {
+        if (active && live) setMetrics(live);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div className="space-y-8">
       {/* HERO */}
@@ -111,7 +127,7 @@ export default function MissionControl() {
           Live Metrics
         </SectionTitle>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {heroMetrics.map((kpi, i) => (
+          {metrics.map((kpi, i) => (
             <Reveal key={kpi.label} i={i}>
               <MetricCard kpi={kpi} />
             </Reveal>
